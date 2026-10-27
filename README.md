@@ -33,6 +33,7 @@ Segue a estrutura de
 - [Formato de arquivo](#formato-de-arquivo)
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Resultados em subclasses de cactos](#resultados-em-subclasses-de-cactos)
+- [Imagens dos cactos](#imagens-dos-cactos)
 - [Desempenho](#desempenho)
 - [Changelog](#changelog)
 
@@ -254,6 +255,10 @@ aresta por linha. Linhas vazias e linhas começando com `#` são ignoradas.
 .
 ├── README.md
 ├── CHANGELOG.md
+├── gerador_imagens/
+│   ├── gerar_imagens.py             # PNGs dos cactos dos resultados (networkx + matplotlib)
+│   ├── requirements.txt
+│   └── imagens/                     # uma pasta por arquivo de resultados
 └── GrundyImproprioCacto/
     ├── Project.toml, Manifest.toml  # dependências (JuMP, HiGHS)
     ├── exemplos.jl                  # exemplos, tabelas e comparação das formulações
@@ -354,6 +359,30 @@ Se o padrão continuar, os cactos satisfazem Γ_1 ≤ log₂(n + 1), um limite
 bem mais justo que 1 + 2·log₂ n. Isso é só uma **conjectura**, apoiada em
 quatro valores. O próximo caso (t = 5, n = 31) está fora do alcance da
 enumeração completa.
+
+## Imagens dos cactos
+
+A pasta [`gerador_imagens/`](gerador_imagens/) tem um script em Python
+(networkx + matplotlib) que desenha os cactos listados em
+`GrundyImproprioCacto/resultados/*.txt`:
+
+```bash
+pip install -r gerador_imagens/requirements.txt
+python gerador_imagens/gerar_imagens.py
+```
+
+Para cada arquivo de resultados, o script cria
+`gerador_imagens/imagens/<nome do arquivo>/` com:
+
+- `cacto_01.png`, `cacto_02.png`, …: um cacto por imagem, com cada vértice
+  pintado pela sua cor gulosa e o rótulo "vértice / cor". O vértice de maior
+  cor tem borda grossa, as arestas de ciclo são sólidas e as pontes tracejadas;
+- `visao_geral.png`: todos os cactos do arquivo lado a lado.
+
+Opções: arquivos específicos como argumentos, `--layout`
+(`kamada_kawai`, o padrão, `planar` ou `spring`), `--saida` e `--dpi`.
+
+![Os 15 cactos com 7 vértices e Γ_1 = 3](gerador_imagens/imagens/menor_cacto_gamma1_3/visao_geral.png)
 
 ## Desempenho
 

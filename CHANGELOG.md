@@ -22,6 +22,9 @@ e o projeto adota o [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   Γ_1 = 4 tem 15 vértices (72 cactos não isomorfos, em
   `resultados/menor_cacto_gamma1_4.txt`). Para Γ_1 = 3, o menor tem 7
   vértices (15 cactos, em `resultados/menor_cacto_gamma1_3.txt`).
+- `gerador_imagens/gerar_imagens.py`: gera PNGs (networkx + matplotlib) de
+  cada cacto dos arquivos de resultados, pintados com a coloração gulosa, e
+  uma visão geral por arquivo.
 - README: valores de Γ_1 em subclasses de cactos e tabela dos menores cactos
   com Γ_1 = t.
 - Formulação de programação inteira de atribuição da dissertação de
