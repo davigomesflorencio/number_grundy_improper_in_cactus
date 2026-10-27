@@ -32,6 +32,7 @@ Segue a estrutura de
 - [Referência da API](#referência-da-api)
 - [Formato de arquivo](#formato-de-arquivo)
 - [Estrutura do projeto](#estrutura-do-projeto)
+- [Resultados em subclasses de cactos](#resultados-em-subclasses-de-cactos)
 - [Desempenho](#desempenho)
 - [Changelog](#changelog)
 
@@ -250,6 +251,36 @@ aresta por linha. Linhas vazias e linhas começando com `#` são ignoradas.
         ├── guloso.jl                # heurística gulosa e força bruta
         └── formulacoes.jl           # formulações de atribuição e de representantes
 ```
+
+## Resultados em subclasses de cactos
+
+Valores de Γ_1 calculados pela formulação de atribuição, todos com
+otimalidade provada pelo HiGHS. São resultados computacionais para os
+tamanhos indicados, não teoremas para todo n.
+
+| Subclasse | Gerador | Tamanhos testados | Γ_1 |
+|---|---|---|---|
+| Caminho P_n | `caminho(n)` | n = 1..10 | 1 para n ≤ 2; 2 para n ≥ 3 |
+| Estrela K_{1,n-1} | `estrela(n)` | n = 2..10 | 1 para n = 2; 2 para n ≥ 3 |
+| Ciclo C_L | `ciclo(L)` | L = 3..12 | 2 |
+| Amizade F_m (m triângulos com um vértice comum) | `amizade(m)` | m = 1..6 | 2 |
+| Sol (C_L com uma folha em cada vértice) | `sol(L)` | L = 3..8 | 2 |
+| Moinho de ciclos C_L, L ≥ 4 | `moinho(m, L)` | m = 1..4, L = 4..6 | 2 para m = 1 (é o ciclo); 3 para m ≥ 2 |
+| Cadeia de triângulos | `cadeia_de_ciclos(m, 3)` | m = 1..5 | 2 para m ≤ 3; 3 para m ≥ 4 |
+| Cadeia de ciclos C_L, L ≥ 4 | `cadeia_de_ciclos(m, L)` | m = 1..5, L = 4..6 | 2 para m = 1; 3 para m ≥ 2 |
+
+Observações:
+
+- **O menor cacto com Γ_1 = 3 tem 7 vértices**: um triângulo 1-2-3 com uma
+  folha em 2 e um vértice 4 ligado a 1, com duas folhas. Em árvores, Γ_1 = t
+  exige pelo menos 3^(t-1) vértices, ou seja, 9 para t = 3 (o mínimo é
+  atingido pela árvore binomial B^1_3).
+- Entre os cactos com até 8 vértices, nenhum tem Γ_1 ≥ 4. Com n = 7, 15 dos
+  63 cactos têm Γ_1 = 3; com n = 8, 83 dos 188 (seção 3 de `exemplos.jl`).
+- Ciclos, grafos da amizade e sóis ficam em Γ_1 = 2, mesmo com grau máximo
+  grande, como no grafo da amizade. Já dois ciclos de comprimento ≥ 4 com um
+  vértice comum bastam para Γ_1 = 3. Com triângulos, são necessários quatro
+  em cadeia.
 
 ## Desempenho
 
