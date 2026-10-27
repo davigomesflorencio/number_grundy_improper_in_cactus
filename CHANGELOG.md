@@ -20,7 +20,8 @@ e o projeto adota o [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Busca de certificados (`certificado_grundy`, `grundy_certificado`) para
   decidir Γ_k ≥ t rapidamente, e o script `menor_cacto.jl`: o menor cacto com
   Γ_1 = 4 tem 15 vértices (72 cactos não isomorfos, em
-  `resultados/menor_cacto_gamma1_4.txt`).
+  `resultados/menor_cacto_gamma1_4.txt`). Para Γ_1 = 3, o menor tem 7
+  vértices (15 cactos, em `resultados/menor_cacto_gamma1_3.txt`).
 - README: valores de Γ_1 em subclasses de cactos e tabela dos menores cactos
   com Γ_1 = t.
 - Formulação de programação inteira de atribuição da dissertação de

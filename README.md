@@ -259,7 +259,7 @@ aresta por linha. Linhas vazias e linhas começando com `#` são ignoradas.
     ├── exemplos.jl                  # exemplos, tabelas e comparação das formulações
     ├── testes.jl                    # testes de correção
     ├── menor_cacto.jl               # menor cacto com Γ_k ≥ t
-    ├── resultados/                  # saída de menor_cacto.jl para t = 4
+    ├── resultados/                  # saída de menor_cacto.jl para t = 3 e t = 4
     └── src/
         ├── GrundyImproprioCacto.jl  # módulo e exports
         ├── grafos.jl                # estrutura Grafo, BFS, E/S
@@ -316,6 +316,25 @@ casos, incluindo todos os cactos com 9 e 10 vértices, sem nenhuma diferença.
 | 2 | 3 | 2 (P_3 e C_3) | 3 |
 | 3 | 7 | 15 | 9 |
 | 4 | **15** | **72** | 27 |
+
+Para t = 3 (`menor_cacto.jl 3 1 10`, menos de 1 s), nenhum cacto com até 6
+vértices tem Γ_1 ≥ 3. Com 7 vértices há 15, todos confirmados pelo PI. Nenhum
+deles é árvore, o que é coerente com o mínimo de 9 vértices nas árvores.
+Oito têm Δ = 3 e um ciclo; sete têm Δ = 4 e dois ciclos. Os ciclos que
+aparecem:
+
+| Ciclos | Cactos |
+|---|---|
+| um C_3 | 2 |
+| um C_4 | 4 |
+| um C_5 | 2 |
+| dois C_3 | 2 |
+| C_3 e C_4 | 3 |
+| C_3 e C_5 | 1 |
+| dois C_4 (o moinho com dois quadrados) | 1 |
+
+A lista completa está em
+[`resultados/menor_cacto_gamma1_3.txt`](GrundyImproprioCacto/resultados/menor_cacto_gamma1_3.txt).
 
 Para t = 4, o script percorreu todos os 1 653 627 cactos com até 15 vértices
 (cerca de 50 minutos). Nenhum cacto com até 14 vértices tem Γ_1 ≥ 4, e os
