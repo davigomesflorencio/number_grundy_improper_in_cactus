@@ -22,8 +22,66 @@ Segue a estrutura de
   - **representantes**: adaptação, para a coloração gulosa k-imprópria, da
     formulação por representantes da coloração (Campêlo, Campos e Corrêa).
 
+## Apresentação
+
+### O que é um cacto
+
+Um **cacto** é um grafo conexo em que dois ciclos compartilham no máximo um
+vértice. Em outras palavras, toda aresta está em no máximo um ciclo, e o
+grafo se decompõe em **blocos** que são arestas soltas (pontes) ou ciclos,
+colados uns aos outros por vértices de corte. Árvores são cactos sem ciclos;
+ciclos, moinhos (vários ciclos por um mesmo vértice) e grafos da amizade
+(vários triângulos por um mesmo vértice) também são cactos.
+
+Nas imagens abaixo, as arestas de ciclo são **sólidas** e as pontes são
+**tracejadas**. Cada vértice é pintado com a cor que recebe numa coloração
+gulosa 1-imprópria que usa o maior número possível de cores, e o vértice com
+a maior cor tem borda grossa.
+
+### Exemplo: um cacto com Γ_1 = 3
+
+![Um cacto com 7 vértices e Γ_1 = 3](gerador_imagens/imagens/menor_cacto_gamma1_3/cacto_01.png)
+
+Este cacto tem um triângulo (1, 2, 3) e três pontes. Os rótulos são
+"vértice / cor". A coloração é gulosa 1-imprópria (cada vértice tolera no
+máximo **um** vizinho da mesma cor):
+
+- os vértices 2, 5, 6 e 7 recebem a cor 1. O vértice 2 tem um vizinho de
+  cor 1 (o 5), então está **saturado**;
+- o vértice 1 não pode receber a cor 1, porque seu vizinho 2 de cor 1 está
+  saturado. Recebe a cor 2;
+- o vértice 4 tem **dois** vizinhos de cor 1 (6 e 7), mais do que o limite
+  de um, então também recebe a cor 2. Com isso, o vértice 1 fica saturado
+  na cor 2;
+- o vértice 3 é vizinho de 2 (saturado na cor 1) e de 1 (saturado na cor 2),
+  então só lhe resta a cor 3.
+
+Colorindo nessa ordem (5, 2, 6, 7, 1, 4, 3), a heurística gulosa usa 3
+cores. Nenhum cacto com até 6 vértices consegue isso.
+
+### Os menores cactos com Γ_1 = 3
+
+Todos os 15 cactos não isomorfos com 7 vértices e Γ_1 = 3 (o menor número de
+vértices possível; uma árvore precisaria de 9):
+
+![Os 15 cactos com 7 vértices e Γ_1 = 3](gerador_imagens/imagens/menor_cacto_gamma1_3/visao_geral.png)
+
+### Os menores cactos com Γ_1 = 4
+
+Todos os 72 cactos não isomorfos com 15 vértices e Γ_1 = 4. Nenhum cacto com
+até 14 vértices chega a 4 cores (uma árvore precisaria de 27). Todos têm
+grau máximo 4 e quatro ou cinco ciclos:
+
+![Os 72 cactos com 15 vértices e Γ_1 = 4](gerador_imagens/imagens/menor_cacto_gamma1_4/visao_geral.png)
+
+Os mínimos 1, 3, 7, 15 sugerem que o menor cacto com Γ_1 = t tem 2^t − 1
+vértices (veja [Menor cacto com Γ_1 = t](#menor-cacto-com-γ_1--t)). As
+imagens são geradas por [`gerador_imagens/`](#imagens-dos-cactos) a partir
+das listas em `GrundyImproprioCacto/resultados/`.
+
 ## Sumário
 
+- [Apresentação](#apresentação)
 - [Definições](#definições)
 - [Formulações](#formulações)
 - [Requisitos](#requisitos)
@@ -382,7 +440,8 @@ Para cada arquivo de resultados, o script cria
 Opções: arquivos específicos como argumentos, `--layout`
 (`kamada_kawai`, o padrão, `planar` ou `spring`), `--saida` e `--dpi`.
 
-![Os 15 cactos com 7 vértices e Γ_1 = 3](gerador_imagens/imagens/menor_cacto_gamma1_3/visao_geral.png)
+As visões gerais dos cactos com Γ_1 = 3 e Γ_1 = 4 estão na
+[Apresentação](#apresentação).
 
 ## Desempenho
 
