@@ -15,6 +15,7 @@ include("grafos.jl")
 include("geradores.jl")
 include("cacto.jl")
 include("guloso.jl")
+include("certificado.jl")
 include("formulacoes.jl")
 
 # estruturas de grafo
@@ -29,6 +30,8 @@ export blocos_arestas, blocos, eh_cacto, num_ciclos, forma_canonica,
        cactos_nao_isomorfos
 # heurística gulosa
 export coloracao_gulosa, eh_k_impropria, eh_gulosa, grundy_forca_bruta
+# busca de certificados
+export certificado_grundy, grundy_certificado, ordem_do_certificado
 # programação inteira
 export modelo_atribuicao, grundy_pi_atribuicao, modelo_representantes,
        grundy_pi_representantes, grundy_improprio_cacto, ordem_da_coloracao

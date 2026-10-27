@@ -85,6 +85,29 @@ end
         end
     end
 
+    @testset "busca de certificados = força bruta (cactos n ≤ 8, grafos gerais)" begin
+        valido(g, k, Γ, cor) = maximum(coloracao_gulosa(g, ordem_do_certificado(cor), k)) >= Γ
+        for n in 1:8, g in cactos_nao_isomorfos(n), k in 0:2
+            Γ, cor = grundy_certificado(g, k)
+            @test Γ == grundy_forca_bruta(g, k)[1] && valido(g, k, Γ, cor)
+        end
+        rng = MersenneTwister(4)
+        for _ in 1:200
+            g = grafo_aleatorio(rand(rng, 1:8), rand(rng); rng)
+            k = rand(rng, 0:3)
+            Γ, cor = grundy_certificado(g, k)
+            @test Γ == grundy_forca_bruta(g, k)[1] && valido(g, k, Γ, cor)
+        end
+    end
+
+    @testset "busca de certificados = PI em cactos aleatórios" begin
+        rng = MersenneTwister(5)
+        for _ in 1:20
+            g = cacto_aleatorio(rand(rng, 11:18); p_ciclo = rand(rng), rng)
+            @test grundy_certificado(g, 1)[1] == grundy_pi_atribuicao(g, 1)[1]
+        end
+    end
+
     @testset "atribuição = representantes em cactos aleatórios" begin
         rng = MersenneTwister(3)
         for _ in 1:20

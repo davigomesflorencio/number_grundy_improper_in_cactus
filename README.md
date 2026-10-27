@@ -126,7 +126,11 @@ Rode os scripts de dentro da pasta `GrundyImproprioCacto/`:
 ```bash
 julia --project=. testes.jl     # testes de correção (cerca de 80 s)
 julia --project=. exemplos.jl   # exemplos, tabelas e comparação das formulações (cerca de 55 s)
+julia --project=. menor_cacto.jl 4 1 16   # menor cacto com Γ_1 ≥ 4 (cerca de 50 min)
 ```
+
+`menor_cacto.jl [t] [k] [nmax]` procura o menor cacto com Γ_k ≥ t; com
+`3 1 10` termina em poucos segundos.
 
 ## Uso no REPL
 
@@ -206,6 +210,17 @@ m, x = modelo_atribuicao(ciclo(6), 1)
 | `ordem_da_coloracao(cor)` | vértices por cor crescente, que reproduz uma coloração gulosa |
 | `grundy_forca_bruta(g, k)` | Γ_k testando as n! ordens; só para validar, com n ≤ 9 |
 
+### Busca de certificados (`src/certificado.jl`)
+
+| Função | Descrição |
+|---|---|
+| `certificado_grundy(g, k, t)` | decide Γ_k ≥ t: devolve uma coloração gulosa de um subgrafo induzido que usa a cor `t` (0 fora dele), ou `nothing` |
+| `grundy_certificado(g, k)` | Γ_k exato testando t = 2, 3, … e o certificado da maior cor |
+| `ordem_do_certificado(cor)` | ordem que faz a heurística gulosa reproduzir o certificado |
+
+É bem mais rápida que o PI para responder "Γ_k ≥ t?" em cactos pequenos,
+mas o tempo é exponencial no pior caso.
+
 ### Programação inteira (`src/formulacoes.jl`)
 
 | Função | Descrição |
@@ -243,12 +258,15 @@ aresta por linha. Linhas vazias e linhas começando com `#` são ignoradas.
     ├── Project.toml, Manifest.toml  # dependências (JuMP, HiGHS)
     ├── exemplos.jl                  # exemplos, tabelas e comparação das formulações
     ├── testes.jl                    # testes de correção
+    ├── menor_cacto.jl               # menor cacto com Γ_k ≥ t
+    ├── resultados/                  # saída de menor_cacto.jl para t = 4
     └── src/
         ├── GrundyImproprioCacto.jl  # módulo e exports
         ├── grafos.jl                # estrutura Grafo, BFS, E/S
         ├── geradores.jl             # geradores de cactos e grafos
         ├── cacto.jl                 # blocos, reconhecimento, forma canônica, enumeração
         ├── guloso.jl                # heurística gulosa e força bruta
+        ├── certificado.jl           # decisão rápida de Γ_k ≥ t
         └── formulacoes.jl           # formulações de atribuição e de representantes
 ```
 
@@ -275,12 +293,48 @@ Observações:
   folha em 2 e um vértice 4 ligado a 1, com duas folhas. Em árvores, Γ_1 = t
   exige pelo menos 3^(t-1) vértices, ou seja, 9 para t = 3 (o mínimo é
   atingido pela árvore binomial B^1_3).
-- Entre os cactos com até 8 vértices, nenhum tem Γ_1 ≥ 4. Com n = 7, 15 dos
-  63 cactos têm Γ_1 = 3; com n = 8, 83 dos 188 (seção 3 de `exemplos.jl`).
+- Com n = 7, 15 dos 63 cactos têm Γ_1 = 3; com n = 8, 83 dos 188 (seção 3
+  de `exemplos.jl`).
 - Ciclos, grafos da amizade e sóis ficam em Γ_1 = 2, mesmo com grau máximo
   grande, como no grafo da amizade. Já dois ciclos de comprimento ≥ 4 com um
   vértice comum bastam para Γ_1 = 3. Com triângulos, são necessários quatro
   em cadeia.
+
+### Menor cacto com Γ_1 = t
+
+Γ_1 é monótono em subgrafos induzidos, e todo subgrafo induzido conexo de um
+cacto é um cacto. Então o menor cacto com Γ_1 = t é o primeiro que aparece
+quando se percorrem todos os cactos não isomorfos por número de vértices.
+É o que faz `menor_cacto.jl`, decidindo Γ_1 ≥ t em cada cacto pela busca de
+certificados ([`src/certificado.jl`](GrundyImproprioCacto/src/certificado.jl)).
+Essa busca foi conferida contra a força bruta e contra o PI em cerca de 4 mil
+casos, incluindo todos os cactos com 9 e 10 vértices, sem nenhuma diferença.
+
+| t | menor n (cactos) | cactos não isomorfos com esse n e Γ_1 = t | menor n (árvores) |
+|---|---|---|---|
+| 1 | 1 | 1 | 1 |
+| 2 | 3 | 2 (P_3 e C_3) | 3 |
+| 3 | 7 | 15 | 9 |
+| 4 | **15** | **72** | 27 |
+
+Para t = 4, o script percorreu todos os 1 653 627 cactos com até 15 vértices
+(cerca de 50 minutos). Nenhum cacto com até 14 vértices tem Γ_1 ≥ 4, e os
+72 de 15 vértices foram confirmados pelo PI (Γ_1 = 4, otimalidade provada).
+Todos têm Δ = 4; 48 têm 4 ciclos e 24 têm 5. A lista completa está em
+[`resultados/menor_cacto_gamma1_4.txt`](GrundyImproprioCacto/resultados/menor_cacto_gamma1_4.txt).
+Um deles:
+
+```text
+arestas: (1,2) (1,3) (1,4) (1,5) (2,3) (2,6) (2,7) (3,11) (3,12) (4,5)
+         (4,8) (5,13) (6,7) (6,14) (8,9) (8,10) (9,10) (9,15)
+cores:   3 2 4 3 1 1 2 2 1 2 1 1 1 1 1   (vértices 1..15)
+```
+
+Os mínimos 1, 3, 7, 15 seguem 2^t − 1. Em árvores, eles são 3^(t−1).
+Se o padrão continuar, os cactos satisfazem Γ_1 ≤ log₂(n + 1), um limite
+bem mais justo que 1 + 2·log₂ n. Isso é só uma **conjectura**, apoiada em
+quatro valores. O próximo caso (t = 5, n = 31) está fora do alcance da
+enumeração completa.
 
 ## Desempenho
 

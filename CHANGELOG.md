@@ -16,7 +16,13 @@ e o projeto adota o [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   `cacto_aleatorio`, além de `renomeia`.
 - Cactos: decomposição em blocos (Tarjan iterativo), `eh_cacto`,
   `forma_canonica` e `cactos_nao_isomorfos` (confere com a OEIS A000083 até
-  n = 11).
+  n = 15).
+- Busca de certificados (`certificado_grundy`, `grundy_certificado`) para
+  decidir Γ_k ≥ t rapidamente, e o script `menor_cacto.jl`: o menor cacto com
+  Γ_1 = 4 tem 15 vértices (72 cactos não isomorfos, em
+  `resultados/menor_cacto_gamma1_4.txt`).
+- README: valores de Γ_1 em subclasses de cactos e tabela dos menores cactos
+  com Γ_1 = t.
 - Formulação de programação inteira de atribuição da dissertação de
   Rodrigues (2020, seção 5.2.2) e uma formulação por representantes adaptada
   à coloração gulosa k-imprópria, com JuMP + HiGHS.

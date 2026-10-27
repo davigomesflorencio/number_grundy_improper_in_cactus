@@ -161,8 +161,8 @@ end
     cactos_nao_isomorfos(n) -> Vector{Grafo}
 
 Todos os cactos com `n` vértices, um de cada classe de isomorfismo
-(sequência OEIS A000083): n = 1..12 → 1, 1, 2, 4, 9, 23, 63, 188, 596,
-1979, 6804, 23993.
+(sequência OEIS A000083): n = 1..15 → 1, 1, 2, 4, 9, 23, 63, 188, 596,
+1979, 6804, 24118, 87379, 322652, 1209808.
 
 Todo cacto com n ≥ 2 vértices tem um bloco-folha (uma folha ou um ciclo com
 um só vértice de corte); removê-lo deixa um cacto menor. Por isso os cactos
